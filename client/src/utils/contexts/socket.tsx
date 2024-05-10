@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { useAuth } from "./auth";
 
@@ -38,8 +38,12 @@ export const SocketContextProvider = ({ children }: { children: ReactNode }) => 
       if (newSocket) newSocket.close();
     };
   }, [user._id]);
-
-  return (
-    <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>
+  const contextValue = useMemo(
+    () => ({
+      socket,
+      onlineUsers,
+    }),
+    [socket, onlineUsers]
   );
+  return <SocketContext.Provider value={contextValue}>{children}</SocketContext.Provider>;
 };
