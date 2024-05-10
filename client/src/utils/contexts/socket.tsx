@@ -23,7 +23,7 @@ export const SocketContextProvider = ({ children }: { children: ReactNode }) => 
 
   useEffect(() => {
     if (!user) return;
-    const newSocket = io("http://localhost:8000/", {
+    const newSocket = io("https://socialite-api.vercel.app/", {
       query: {
         userId: user._id,
       },

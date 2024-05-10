@@ -9,7 +9,7 @@ export const setAxiosConfig = (token: string) => {
 };
 
 axiosWithConfig.interceptors.request.use((axiosConfig) => {
-  axiosConfig.baseURL = "https://rest-api-social-media.vercel.app/";
+  axiosConfig.baseURL = "https://socialite-api.vercel.app/";
   axiosConfig.headers.Authorization = `Bearer ${bearerToken}`;
   return axiosConfig;
 });
