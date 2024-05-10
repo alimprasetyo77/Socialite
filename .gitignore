@@ -1,0 +1,7 @@
+# Ignore node_modules in subfolders
+api/node_modules/
+api/dist
+api/.vercel/
+api/.env
+
+client/node_modules

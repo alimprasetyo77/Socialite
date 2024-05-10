@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+html, body {
+    font-family: "Inter", sans-serif;
+}
+
+
+.scrollbar-chat::-webkit-scrollbar {
+    width: 0.40rem;
+    height: 0.25rem;
+    }
+
+
+.scrollbar-chat::-webkit-scrollbar-thumb {
+    background-color: rgb(222, 222, 222);
+    border-radius: 50px;
+}
+.scrollbar-chat::-webkit-scrollbar-track{
+    @apply bg-slate-700
+}
+
