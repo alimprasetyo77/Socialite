@@ -1,3 +1,4 @@
+import { IPostStatus } from "../apis/post/types";
 import { IUser } from "../apis/user/types";
 
 export type PopupState = {
@@ -18,6 +19,10 @@ export type PopupState = {
   };
   isOpenPostStatus: boolean;
   isOpenSidebar: boolean;
+  isOpenDetailStatusPost: {
+    isOpen: boolean;
+    postsStatus: IPostStatus | null;
+  };
 };
 export type PopupAction =
   | { type: "SET_OPEN_PROFILE" }
@@ -43,4 +48,6 @@ export type PopupAction =
   | { type: "SET_OPEN_POST_STATUS" }
   | { type: "SET_CLOSE_POST_STATUS" }
   | { type: "SET_OPEN_SIDEBAR" }
-  | { type: "SET_CLOSE_SIDEBAR" };
+  | { type: "SET_CLOSE_SIDEBAR" }
+  | { type: "SET_OPEN_DETAIL_STATUS_POST"; postStatus: IPostStatus }
+  | { type: "SET_CLOSE_DETAIL_STATUS_POST" };

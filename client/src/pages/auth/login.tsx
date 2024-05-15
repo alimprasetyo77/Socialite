@@ -86,12 +86,12 @@ const Login = () => {
         >
           {isSubmitting ? "Loading.." : "Sign In"}
         </button>
-        <div className="flex items-center gap-2 w-full py-5">
+        {/* <div className="flex items-center gap-2 w-full py-5">
           <span className="border h-px border-white/10 w-full"></span>
           <span className="text-sm text-white whitespace-nowrap font-medium">Or continue with</span>
           <span className="border h-px border-white/10 w-full"></span>
-        </div>
-        <div className="flex items-center gap-x-3 w-full ">
+        </div> */}
+        {/* <div className="flex items-center gap-x-3 w-full ">
           <button className="p-2 rounded-md font-semibold text-sm text-white bg-blue-secondary w-full">
             Facebook
           </button>
@@ -101,7 +101,7 @@ const Login = () => {
           <button className="p-2 rounded-md font-semibold text-sm text-white bg-blue-secondary w-full">
             Github
           </button>
-        </div>
+        </div> */}
       </form>
     </LoginRegister>
   );

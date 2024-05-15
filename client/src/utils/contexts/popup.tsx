@@ -26,6 +26,10 @@ const PopupContext = createContext<Context>({
     },
     isOpenPostStatus: false,
     isOpenSidebar: false,
+    isOpenDetailStatusPost: {
+      isOpen: false,
+      postsStatus: null,
+    },
   },
   dispatch: () => null,
 });
@@ -49,6 +53,10 @@ export const PopupProvider = ({ children }: { children: ReactNode }) => {
     },
     isOpenPostStatus: false,
     isOpenSidebar: false,
+    isOpenDetailStatusPost: {
+      isOpen: false,
+      postsStatus: null,
+    },
   });
   const popupContextValue = {
     state,

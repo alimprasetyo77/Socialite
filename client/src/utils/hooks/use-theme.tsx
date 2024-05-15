@@ -9,6 +9,8 @@ function useTheme() {
     if (!localStorage.getItem("theme")) {
       const system = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       document.documentElement.classList.add(system);
+      setTheme(system);
+      localStorage.setItem("theme", system);
       return;
     }
 

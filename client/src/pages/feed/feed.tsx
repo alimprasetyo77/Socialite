@@ -13,6 +13,9 @@ import SkeletonPost from "../../components/SkeletonPost";
 import { useSocket } from "../../utils/contexts/socket";
 import { useAuth } from "../../utils/contexts/auth";
 import { FaCamera } from "react-icons/fa";
+import { getPostsStatus } from "../../utils/apis/post/api";
+import { IPostStatus } from "../../utils/apis/post/types";
+
 const Feed = () => {
   const { user } = useAuth();
   const { dispatch } = usePopup();
@@ -29,9 +32,12 @@ const Feed = () => {
   const [followUnfollowStatus, setFollowUnfollowStatus] = useState<string[]>([]);
   const [sizePage, setSizePage] = useState(1);
   const [stopScroll, setStopScroll] = useState(false);
+  const [postsStatus, setPostsStatus] = useState<IPostStatus[]>();
+
   useEffect(() => {
     getFeed();
     fetchPeople();
+    fetchPostsStatus();
   }, []);
 
   useEffect(() => {
@@ -127,7 +133,14 @@ const Feed = () => {
       setFeedLoading(false);
     }
   };
-
+  const fetchPostsStatus = async () => {
+    try {
+      const result = await getPostsStatus();
+      setPostsStatus(result.data);
+    } catch (error: any) {
+      toast.error(error.toString());
+    }
+  };
   const handlePrev = () => {
     if (slideRef.current) {
       slideRef.current.scrollTo({ left: slideRef.current.scrollLeft - 84, behavior: "smooth" });
@@ -143,7 +156,7 @@ const Feed = () => {
   return (
     <main className=" flex justify-center gap-20 container">
       <div className="max-w-3xl w-full py-3 px-4 md:px-8 flex flex-col items-center gap-5">
-        <div className="relative flex">
+        <div className="relative flex w-full">
           <button
             hidden={!scrollNavigation.prev}
             className="p-2 rounded-full bg-slate-100 text-black dark:text-white dark:bg-slate-700 shadow-sm absolute left-2 top-1/2 -translate-y-1/2 z-10"
@@ -151,27 +164,35 @@ const Feed = () => {
           >
             <GrPrevious />
           </button>
-          <div className="flex items-center gap-x-5 overflow-hidden mx-7 py-3" ref={slideRef}>
-            {Array.from({ length: 10 }, (_, index) => {
-              if (index === 0) {
-                return (
-                  <button
-                    key={index}
-                    className="min-w-14 min-h-14 md:min-w-16 md:min-h-16 rounded-full border-[3px] bg-slate-100 dark:bg-blue-3 border-dashed border-slate-600 dark:border-slate-500 cursor-pointer duration-300 flex items-center justify-center text-slate-700 dark:text-white/80"
-                    onClick={() => dispatch({ type: "SET_OPEN_POST_STATUS" })}
-                  >
-                    <FaCamera className=" size-7 " />
-                  </button>
-                );
-              } else {
-                return (
+          <div
+            className="flex items-center gap-x-5 overflow-hidden mx-7 py-5 w-full  "
+            ref={slideRef}
+          >
+            <button
+              className="min-w-14 min-h-14 md:min-w-16 md:min-h-16 rounded-full border-[3px] bg-slate-100 dark:bg-blue-3 border-dashed border-slate-600 dark:border-slate-500 cursor-pointer duration-300 flex items-center justify-center text-slate-700 dark:text-white/80"
+              onClick={() => dispatch({ type: "SET_OPEN_POST_STATUS" })}
+            >
+              <FaCamera className=" size-7 " />
+            </button>
+            {postsStatus?.map((post, index) => {
+              return (
+                <div className="relative ">
                   <img
                     key={index}
-                    src={"https://source.unsplash.com/80x80?person"}
+                    src={post.postedBy.profilePic ? post.postedBy.profilePic : defaultProfile}
                     className="size-14 md:size-16 rounded-full border-[3px] border-slate-100 dark:border-slate-600 hover:scale-110 cursor-pointer duration-300"
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_OPEN_DETAIL_STATUS_POST",
+                        postStatus: post,
+                      })
+                    }
                   />
-                );
-              }
+                  <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs font-semibold dark:text-white text-slate-900 line-clamp-1 text-nowrap">
+                    {post.postedBy.name}
+                  </span>
+                </div>
+              );
             })}
           </div>
 

@@ -5,3 +5,4 @@ api/.vercel/
 api/.env
 
 client/node_modules
+client/.env

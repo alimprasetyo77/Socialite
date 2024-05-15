@@ -13,16 +13,16 @@ const content = [
     image: "https://demo.foxthemes.net/socialite-v3.0/assets/images/icons/message.png",
     location: "/messages",
   },
-  {
-    title: "Video",
-    image: "https://demo.foxthemes.net/socialite-v3.0/assets/images/icons/video.png",
-    location: "/video",
-  },
-  {
-    title: "Market",
-    image: "https://demo.foxthemes.net/socialite-v3.0/assets/images/icons/market.png",
-    location: "/markets",
-  },
+  // {
+  //   title: "Video",
+  //   image: "https://demo.foxthemes.net/socialite-v3.0/assets/images/icons/video.png",
+  //   location: "/video",
+  // },
+  // {
+  //   title: "Market",
+  //   image: "https://demo.foxthemes.net/socialite-v3.0/assets/images/icons/market.png",
+  //   location: "/markets",
+  // },
 ];
 
 const LeftSidebar = () => {

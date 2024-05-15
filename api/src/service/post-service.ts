@@ -7,7 +7,7 @@ import { POST, POST_STATUS, REPLY_POST } from "../validation/post-validation";
 import { validate } from "../validation/validation";
 import { v2 as cloudinary } from "cloudinary";
 import { createNotificationService } from "./notification-service";
-import PostStatus from "../model/post-status-model";
+import PostStatus, { IPostStatus } from "../model/post-status-model";
 
 export const Create = async (user: IUserSchema, request: CreatePostRequest): Promise<void> => {
   const requestValidation = validate(POST, request);
@@ -36,12 +36,34 @@ export const Create = async (user: IUserSchema, request: CreatePostRequest): Pro
   await newPost.save();
 };
 
+export const generateSignaturePostStatus = async (request: { folder: string }): Promise<any> => {
+  const folder = request.folder;
+  if (!folder) throw ResponseError(400, "folder name is required");
+
+  const timestamp = Math.round(new Date().getTime() / 1000);
+
+  const signature = cloudinary.utils.api_sign_request(
+    {
+      timestamp,
+      folder,
+    },
+    process.env.CLOUDINARY_SECRET!
+  );
+
+  if (!signature || !timestamp) throw ResponseError(400, "Error signature");
+  return {
+    timestamp: timestamp,
+    signature: signature,
+  };
+};
+
 export const CreatePostStatus = async (
   user: IUserSchema,
   request: CreatePostStatusRequest
 ): Promise<any> => {
   const requestValidation = validate(POST_STATUS, request);
-  let { postedBy, caption, image } = requestValidation;
+  const postedBy = requestValidation.postedBy;
+  let { type, caption, fileUrl } = requestValidation.posts;
 
   const currentUser = await User.findById(postedBy);
 
@@ -49,26 +71,75 @@ export const CreatePostStatus = async (
     throw ResponseError(404, "User not found");
   }
 
-  if (currentUser._id != user.id) {
+  if (currentUser._id.toString() !== user._id.toString()) {
     throw ResponseError(401, "Unauthorized to create post ");
   }
-  const uploadedResponse = await cloudinary.uploader.upload(image);
-  image = uploadedResponse.secure_url;
-
-  const newPostStatus = new PostStatus(
-    {
-      postedBy,
+  const postExists = await PostStatus.findOne({ postedBy: postedBy });
+  if (postExists) {
+    postExists.posts.push({
+      type,
       caption,
-      image,
-    },
-    { expireAfterSeconds: 3600 }
-  );
-  await newPostStatus.save();
+      fileUrl,
+    });
+    await postExists.save();
+  } else {
+    const newPostStatus = new PostStatus({
+      postedBy,
+      posts: [
+        {
+          type,
+          caption,
+          fileUrl,
+        },
+      ],
+    });
+    await newPostStatus.save();
+  }
 };
 
-export const getPostStatusService = async (): Promise<any> => {
-  const posts = await PostStatus.find();
-  return posts;
+export const getPostStatusService = async (user: IUserSchema): Promise<any> => {
+  const posts = await PostStatus.find().populate({
+    path: "postedBy",
+    select: "name profilePic",
+  });
+
+  const filterData = posts.filter((value) => {
+    return (
+      value.postedBy._id.toString() === user._id.toString() ||
+      user.following.includes(value.postedBy._id.toString())
+    );
+  });
+  filterData.forEach((value) => {
+    const target = value.postedBy._id.toString() === user._id.toString();
+    if (target) {
+      const index = filterData.indexOf(value);
+      filterData.splice(index, 1);
+      filterData.unshift(value);
+    }
+  });
+  return filterData;
+};
+
+export const deletePostStatusService = async (request: {
+  postId: string;
+  itemPostId: string;
+}): Promise<any> => {
+  const { itemPostId, postId } = request;
+  if (!itemPostId || !postId) throw ResponseError(400, "Post id required");
+
+  const post = await PostStatus.findOne({
+    _id: postId,
+    posts: { $elemMatch: { _id: itemPostId } },
+  });
+
+  if (!post) throw ResponseError(404, "Post not found");
+
+  await PostStatus.updateOne(
+    { _id: postId },
+    {
+      $pull: { posts: { _id: itemPostId } },
+    }
+  );
 };
 
 export const getPostService = async (postId: string): Promise<{ data: IPostSchema }> => {

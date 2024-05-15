@@ -46,8 +46,11 @@ export interface CreatePostRequest {
 }
 export interface CreatePostStatusRequest {
   postedBy: string;
-  caption: string;
-  image: string;
+  posts: {
+    type: "image" | "video";
+    caption: string;
+    fileUrl: string;
+  };
 }
 export interface SendMessageRequest {
   recipientId: string;

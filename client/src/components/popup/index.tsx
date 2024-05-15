@@ -6,6 +6,7 @@ import Chats from "./Chats";
 import PopupCreatePost from "./CreatePost";
 import CreatePostStatus from "./CreatePostStatus";
 import DetailPost from "./DetailPost";
+import DetailPostStatus from "./DetailPostStatus";
 import Notifications from "./Notifications";
 import PopupProfile from "./Profile";
 
@@ -15,6 +16,13 @@ const Popup = () => {
 
   return (
     <>
+      {state.isOpenDetailStatusPost && (
+        <DetailPostStatus
+          dispatch={dispatch}
+          isOpenDetailPostStatus={state.isOpenDetailStatusPost}
+        />
+      )}
+
       {state.isOpenPostStatus && (
         <CreatePostStatus dispatch={dispatch} isOpenCreatePostStatus={state.isOpenPostStatus} />
       )}

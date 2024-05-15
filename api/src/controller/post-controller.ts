@@ -4,6 +4,8 @@ import {
   Create,
   CreatePostStatus,
   deletePostService,
+  deletePostStatusService,
+  generateSignaturePostStatus,
   getFeedPostsService,
   getPostService,
   getPostStatusService,
@@ -28,6 +30,16 @@ export const createPost = async (
     next(e);
   }
 };
+
+export const generateSignature = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const response = await generateSignaturePostStatus(req.body);
+    res.status(201).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createPostStatus = async (
   req: Request & { user?: IUserSchema },
   res: Response,
@@ -42,14 +54,28 @@ export const createPostStatus = async (
   }
 };
 
-export const getPostStatus = async (req: Request, res: Response, next: NextFunction) => {
+export const getPostStatus = async (
+  req: Request & { user?: IUserSchema },
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const response = await getPostStatusService();
+    const response = await getPostStatusService(req.user!);
     res.status(200).json({ data: response });
   } catch (e) {
     next(e);
   }
 };
+
+export const deletePostStatus = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await deletePostStatusService(req.body);
+    res.status(200).json({ message: "Delete post status successfuly." });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const getPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const response = await getPostService(req.params.id);

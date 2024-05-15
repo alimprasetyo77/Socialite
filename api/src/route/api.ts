@@ -17,6 +17,8 @@ import {
   createPost,
   createPostStatus,
   deletePost,
+  deletePostStatus,
+  generateSignature,
   getFeedPosts,
   getPost,
   getPostStatus,
@@ -51,9 +53,11 @@ apiRouter.delete("/users", deleteUser);
 
 // post
 apiRouter.get("/feed", getFeedPosts);
+apiRouter.post("/signatureUpload", generateSignature);
 apiRouter.get("/post-status", getPostStatus);
 apiRouter.post("/post", createPost);
 apiRouter.post("/post-status", createPostStatus);
+apiRouter.put("/post-status", deletePostStatus);
 apiRouter.get("/post/:id", getPost);
 apiRouter.get("/post-user/:id", getUserPosts);
 apiRouter.delete("/post/:id", deletePost);

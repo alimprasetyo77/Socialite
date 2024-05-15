@@ -18,15 +18,11 @@ export const POST: ZodType = z.object({
 });
 export const POST_STATUS: ZodType = z.object({
   postedBy: z.string().min(1, { message: "Id sender required" }),
-  caption: z.string().optional(),
-  image: z.string().refine(
-    (data) => {
-      if (!data) return true;
-      const base64Part = data?.split(",")[1] || data;
-      return base64Regex.test(base64Part as string);
-    },
-    { message: "Invalid format base64" }
-  ),
+  posts: z.object({
+    type: z.enum(["video", "image"]),
+    caption: z.string().optional(),
+    fileUrl: z.string(),
+  }),
 });
 
 export const REPLY_POST = z.object({

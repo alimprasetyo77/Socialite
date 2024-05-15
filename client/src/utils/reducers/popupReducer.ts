@@ -50,6 +50,10 @@ export const popupReducer = (state: PopupState, action: PopupAction): PopupState
       return { ...state, isOpenSidebar: true };
     case "SET_CLOSE_SIDEBAR":
       return { ...state, isOpenSidebar: false };
+    case "SET_OPEN_DETAIL_STATUS_POST":
+      return { ...state, isOpenDetailStatusPost: { isOpen: true, postsStatus: action.postStatus } };
+    case "SET_CLOSE_DETAIL_STATUS_POST":
+      return { ...state, isOpenDetailStatusPost: { isOpen: false, postsStatus: null } };
     default:
       return state;
   }
