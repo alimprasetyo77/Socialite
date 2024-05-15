@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://demo.foxthemes.net/socialite-v3.0/assets/images/logo.png" width="300" alt="project-logo">
+  <img src="https://demo.foxthemes.net/socialite-v3.0/assets/images/logo-light.png" width="300" alt="project-logo">
 </p>
 
 <p align="center">
