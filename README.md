@@ -55,7 +55,7 @@ Features and Functions:
 
 > [!IMPORTANT]
 >
-> <sub>If you find a bug or error it's because I host this application on Vercel.</sub>
+> <sub>If you find a bug or error it's because I hosting this application on Vercel.</sub>
 
 <br>
 
