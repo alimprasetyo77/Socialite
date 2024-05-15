@@ -99,12 +99,6 @@ client/
 
 ## 🚀 Getting Started
 
-***Requirements***
-
-Ensure you have the following dependencies installed on your system:
-
-
-
 ### ⚙️ Install
 
 1. Clone the Socialite repository:
